@@ -1,0 +1,5 @@
+{
+  "name": "AI Trading Analyst",
+  "description": "An application that displays real-time asset charts from TradingView and uses AI to analyze market sentiment and chart patterns, providing recommendations on whether to go long, short, or stay neutral.",
+  "requestFramePermissions": []
+}

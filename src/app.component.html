@@ -1,0 +1,93 @@
+<div class="min-h-screen flex flex-col p-4 sm:p-6 lg:p-8">
+  <!-- Header -->
+  <header class="mb-8">
+    <h1 class="text-4xl font-extrabold text-white tracking-tight">
+      <span class="text-cyan-400">AI</span> Trading Analyst
+    </h1>
+    <p class="text-gray-400 mt-1">Harnessing AI to analyze market trends and provide trade insights.</p>
+  </header>
+
+  <!-- Controls -->
+  <div class="mb-4 flex flex-col sm:flex-row gap-4 items-center p-4 bg-gray-800/50 border border-gray-700 rounded-lg">
+    <!-- Asset Search -->
+    <div class="flex-grow w-full sm:w-auto">
+      <label for="asset-search" class="block text-sm font-medium text-gray-300 mb-1">Asset Symbol</label>
+      <div class="flex rounded-md shadow-sm">
+        <input 
+          type="text" 
+          id="asset-search"
+          name="asset-search"
+          class="block w-full flex-1 rounded-none rounded-l-md bg-gray-900 border-gray-600 placeholder-gray-500 focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm text-white"
+          placeholder="e.g., BTC-USD, NVDA, SPX"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
+          (keydown.enter)="searchAsset()"
+        >
+        <button 
+          type="button" 
+          (click)="searchAsset()"
+          class="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-600 text-sm font-medium rounded-r-md text-gray-300 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+          </svg>
+          <span>Search</span>
+        </button>
+      </div>
+    </div>
+    <!-- Timeframe Selection -->
+    <div class="w-full sm:w-auto">
+      <label class="block text-sm font-medium text-gray-300 mb-1">Timeframe</label>
+      <div class="flex space-x-1 bg-gray-900 p-1 rounded-md">
+        @for (tf of timeframes; track tf) {
+          <button
+            (click)="selectTimeframe(tf)"
+            [class]="selectedTimeframe() === tf ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-gray-700'"
+            class="px-3 py-1 text-sm font-medium rounded-md transition-colors"
+          >
+            {{ tf }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Popular Assets -->
+  <div class="mb-6 flex items-center gap-2 flex-wrap px-4 sm:px-0">
+      <span class="text-sm font-medium text-gray-400 mr-2">Populares:</span>
+      @for (asset of popularAssets; track asset) {
+        <button
+          (click)="selectPopularAsset(asset)"
+          [class]="selectedAsset() === asset ? 'bg-cyan-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'"
+          class="px-3 py-1 text-xs font-semibold rounded-full transition-colors duration-150"
+        >
+          {{ asset }}
+        </button>
+      }
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Chart Section -->
+    <div class="lg:col-span-2 bg-gray-800/50 rounded-lg p-4 flex flex-col border border-gray-700">
+      <div class="flex items-center justify-between mb-4">
+         <h2 class="text-xl font-bold text-white">Chart for {{ selectedAsset() }}</h2>
+      </div>
+     
+      <div class="flex-grow">
+        <app-trading-chart 
+          [asset]="selectedAsset()" 
+          [timeframe]="selectedTimeframe()">
+        </app-trading-chart>
+      </div>
+    </div>
+
+    <!-- AI Analysis Section -->
+    <div class="lg:col-span-1">
+      <app-ai-analysis 
+        [asset]="selectedAsset()" 
+        [timeframe]="selectedTimeframe()">
+      </app-ai-analysis>
+    </div>
+  </main>
+</div>
